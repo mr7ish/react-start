@@ -1,0 +1,34 @@
+.gallery {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.gallery .profile {
+  width: 500px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.gallery .profile .account {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  bottom: 0;
+  z-index: 2;
+  color: aliceblue;
+  text-align: center;
+  background-color: rgba(54, 66, 66, 0.6);
+  line-height: 50px;
+}
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.5s linear;
+}
+.gallery img:hover {
+  transform: scale(1.1);
+}
