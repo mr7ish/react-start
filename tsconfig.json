@@ -1,25 +1,42 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    /* "moduleResolution": "bundler", 
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true, */
-    "isolatedModules": true,
-    "noEmit": true,
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "sourceMap": true,
+    "baseUrl": ".",
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "allowJs": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@@/*": ["./src/.umi/*"]
+    }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "mock/**/*",
+    "src/**/*",
+    "playwright.config.ts",
+    "tests/**/*",
+    "test/**/*",
+    "__test__/**/*",
+    "typings/**/*",
+    "config/**/*",
+    ".eslintrc.js",
+    ".stylelintrc.js",
+    ".prettierrc.js",
+    "jest.config.js",
+    "mock/*"
+  ],
+  "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }
