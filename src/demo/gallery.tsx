@@ -9,7 +9,7 @@ const profiles: Profiles[] = Array(9).fill({ key: 0 }).map((_profile: Profiles, 
 	key: index + 1,
 	name: `Taylor ${index + 1}`
 }))
- 
+
 export const Gallery = () => {
 	const gallery = profiles.map(profile => 
 		<div className="profile" key={profile.key}>
