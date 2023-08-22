@@ -1,4 +1,5 @@
 import { Profile } from './profile';
+import './index.less';
 
 type Profiles = {
 	key: number
@@ -11,20 +12,20 @@ const profiles: Profiles[] = Array(9).fill({ key: 0 }).map((_profile: Profiles, 
 }))
 
 export const Gallery = () => {
-	const gallery = profiles.map(profile => 
+	const gallery = profiles.map(profile =>
 		<div className="profile" key={profile.key}>
 			<Profile />
 			<div className="account">
-				{ profile.name }
+				{profile.name}
 			</div>
 		</div>
 	)
 
 	return (
 		<>
-			<h1 style={{textAlign: 'center'}}>This is a Gallery for Taylor</h1>
+			<h1 style={{ textAlign: 'center' }}>This is a Gallery for Taylor</h1>
 			<div className="gallery">
-				{ gallery }
+				{gallery}
 			</div>
 		</>
 	)
