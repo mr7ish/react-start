@@ -1,3 +1,5 @@
-import { Gallery } from "./demo/gallery";
+// import { Gallery } from "./demo/gallery";
+import MouseMovingWrapper from "./demo/mouseMoving";
 
-export const App = () => <Gallery />
+
+export const App = () => <MouseMovingWrapper />
