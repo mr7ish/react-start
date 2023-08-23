@@ -8,7 +8,7 @@ type Position = {
     y: number
 }
 
-type Tree = {
+type TreeType = {
     origins: {
         [propsName: number]: {
             id: number;
@@ -19,7 +19,7 @@ type Tree = {
     id: number
 }
 
-const Tree = ({ origins, id }: Tree) => {
+const Tree = ({ origins, id }: TreeType) => {
     const self = origins[id];
     const childIds = self.childIds;
     return (
