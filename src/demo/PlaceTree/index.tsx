@@ -131,7 +131,8 @@ const Toggle = ({ toggleStatusCallBack }: { toggleStatusCallBack: (status: boole
             className='toggle'
             onClick={toggle}
             style={{
-                borderColor: `${isSun ? 'rgba(60, 60, 67, .29)' : 'rgba(82, 82, 89, .68)'}`
+                borderColor: `${isSun ? 'rgba(60, 60, 67, .29)' : 'rgba(82, 82, 89, .68)'}`,
+                // backgroundColor: `${isSun ? '#F6F6F7' : '#313136'}`,
             }}
             title={isSun ? 'sun theme' : 'dark theme'}
         >
