@@ -20,6 +20,11 @@ export class UseMath {
 }
 
 export class UseDate {
+    /**
+     * 
+     * @param fn callback
+     * @returns callback execution time(ms)
+     */
     static fnRunTime(fn: () => void) {
         const startTime = Date.now();
         fn();
