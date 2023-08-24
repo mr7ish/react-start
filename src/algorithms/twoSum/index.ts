@@ -89,10 +89,19 @@ export class TwoSum {
         return `not find`;
     }
 
-    output() {
-        // UseDate.fnRunTime(() => {this.exhaust.call(this)});
-        // UseDate.fnRunTime(() => {this.doublePointer.call(this)});
-        UseDate.fnRunTime(() => {this.hashMap.call(this)});
+    /**
+     * 输出(支持链式调用)
+     * @param types 穷举 | 双指针 | 值索引映射
+     * @returns this
+     */
+    output(types: 'exhaust' | 'doublePointer' | 'hashMap') {
+        const lib = {
+            exhaust: () => { UseDate.fnRunTime(() => {this.exhaust.call(this)}) },
+            doublePointer: () => { UseDate.fnRunTime(() => {this.doublePointer.call(this)}) },
+            hashMap: () => { UseDate.fnRunTime(() => {this.hashMap.call(this)}) }
+        }
+        !lib[types] ? console.log(`no ${types} method`) : lib[types]();
+        return this;
     }
 
 }
