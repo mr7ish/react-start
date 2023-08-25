@@ -1,3 +1,6 @@
+/**
+ * composition of Math utils
+ */
 export class UseMath {
     /**
      * 
@@ -19,6 +22,9 @@ export class UseMath {
     }
 }
 
+/**
+ * composition of Time(Date) utils
+ */
 export class UseDate {
     /**
      * 
