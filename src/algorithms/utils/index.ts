@@ -40,7 +40,7 @@ export class UseDate {
     }
 }
 
-type GetNumbersType = 'positive' | 'negative' | 'alternate';
+type GetNumbersType = 'positive' | 'negative' | 'both';
 
 /**
  * composition of get some datas
@@ -61,29 +61,35 @@ export class UseGenerateDatas {
         return letters;
     }
     
+    /**
+     * 
+     * @param range number
+     * @param type  number of 'positive' | 'negative' | 'both'
+     * @returns numbers array
+     */
     static getNumbers(range: number, type: GetNumbersType) {
         const numbers: number[] = [];
         let standard = UseMath.getRandom(range);
 
-        // const handle = () => {
-        //     if(type === 'positive') {
-        //         numbers.push.bind();
-        //     } else if(type === 'negative') {
-        //         numbers.push(-1 * standard--);
-        //     } else {
-        //         numbers.push(Math.random() > 0.5 ? standard-- : -1 * standard--)
-        //     }
-        // }
-
-        while (standard >= 0) {
-            if(type === 'positive') {
-                numbers.push(standard--);
-            } else if(type === 'negative') {
-                numbers.push(-1 * standard--);
-            } else {
-                numbers.push(Math.random() > 0.5 ? standard-- : -1 * standard--)
+        const handle = {
+            positive(num: number) {
+                numbers.push(num);
+            },
+            negative(num: number) {
+                numbers.push(num * -1);
+            },
+            both(num: number) {
+                numbers.push(Math.random() > 0.5 ? num : num * -1);
             }
         }
+
+        const push = handle[type] ?? handle['positive'];
+
+        while (standard >= 0) {
+            push(standard--);
+        }
+        console.log(numbers);
+        
         return numbers;
     }
 

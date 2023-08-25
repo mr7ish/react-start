@@ -1,4 +1,4 @@
-import { UseMath } from '@/algorithms/utils';
+import { UseGenerateDatas, UseMath } from '@/algorithms/utils';
 import './index.less';
 import { useEffect, useRef } from 'react';
 
@@ -15,18 +15,20 @@ const CloudWrapper = () => {
 const Cloud = () => {
     const cloudRef = useRef<HTMLDivElement | null>(null);
     const timer = useRef<NodeJS.Timer>();
+    const timersId: number[] = [];
 
     useEffect(() => {
         console.log(cloudRef.current);
 
         if (cloudRef.current) {
-            timer.current = intervalGenerate(cloudRef.current);
+            timer.current = intervalGenerate(cloudRef.current, 50);
+            console.log(`timer => `, timer.current);
+            timersId.push(timer.current as unknown as number);
             setTimeout(() => {
-                clearTimeout(timer.current);
-            }, 5000);
+                console.log('clear', timersId);
+                timersId.map(timer => clearInterval(timer));
+            }, 30000);
         }
-
-
     }, []);
 
     return (
@@ -35,12 +37,12 @@ const Cloud = () => {
 }
 
 
-
+const getCombines = () => [...UseGenerateDatas.getLetters(), ...UseGenerateDatas.getNumbers(10, 'both')];
 
 
 const getOneLetter = () => {
-    // const combines = [...getLetters(), ...getNumbers()];
-    // return combines[UseMath.getRandom(combines.length - 1)];
+    const combines = getCombines();
+    return combines[UseMath.getRandom(combines.length - 1)];
 }
 
 const randomStyle = () => ({
