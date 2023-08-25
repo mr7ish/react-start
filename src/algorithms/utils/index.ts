@@ -39,3 +39,52 @@ export class UseDate {
         return endTime - startTime;
     }
 }
+
+type GetNumbersType = 'positive' | 'negative' | 'alternate';
+
+/**
+ * composition of get some datas
+ */
+export class UseGenerateDatas {
+    /**
+     * 
+     * @returns all letters array
+     */
+    static getLetters() {
+        const letters: string[] = [];
+        const uppercaseA = 'A'.charCodeAt(0);
+        for (let i = 0; i < 26; i++) {
+            const nextLetter = String.fromCharCode(uppercaseA + i);
+            letters.push(nextLetter);
+            letters.push(String.fromCharCode(nextLetter.charCodeAt(0) + 32));
+        }
+        return letters;
+    }
+    
+    static getNumbers(range: number, type: GetNumbersType) {
+        const numbers: number[] = [];
+        let standard = UseMath.getRandom(range);
+
+        // const handle = () => {
+        //     if(type === 'positive') {
+        //         numbers.push.bind();
+        //     } else if(type === 'negative') {
+        //         numbers.push(-1 * standard--);
+        //     } else {
+        //         numbers.push(Math.random() > 0.5 ? standard-- : -1 * standard--)
+        //     }
+        // }
+
+        while (standard >= 0) {
+            if(type === 'positive') {
+                numbers.push(standard--);
+            } else if(type === 'negative') {
+                numbers.push(-1 * standard--);
+            } else {
+                numbers.push(Math.random() > 0.5 ? standard-- : -1 * standard--)
+            }
+        }
+        return numbers;
+    }
+
+}
