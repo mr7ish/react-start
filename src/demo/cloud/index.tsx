@@ -1,4 +1,4 @@
-import { UseGenerateDatas, UseMath } from '@/algorithms/utils';
+import { UseGenerateDatas, UseMath } from '@/utils';
 import './index.less';
 import { useEffect, useRef } from 'react';
 
