@@ -2,6 +2,12 @@
 // import MouseMovingWrapper from "./demo/mouseMoving";
 // import Root from "./demo/PlaceTree";
 // import Algorithems from './algorithms';
-import CloudWrapper from './demo/cloud';
+// import CloudWrapper from './demo/cloud';
+import WaveButton from './demo/wave-button';
 
-export const App = () => <CloudWrapper />
+const click = (args: any) => {
+    console.log(args);
+    alert('clicked')
+}
+
+export const App = () => <WaveButton text='button' onClick={click}/>

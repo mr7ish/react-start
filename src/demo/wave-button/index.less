@@ -1,0 +1,55 @@
+.wave-button-wrapper {
+    display: inline-block;
+    font-size: 16px;
+    
+    .wave-button {
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        font-family: sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 0.75em 1em;
+        color: blue;
+        border: .15em solid blue;
+        border-radius: 2em;
+        transition: all 4s;
+        cursor: pointer;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            top: -1.5em;
+            z-index: -1;
+            width: 250px;
+            height: 250px;
+            aspect-ratio: 1;
+            border-radius: 40%;
+            background-color: rgba(0, 0, 255, .25);
+            transition: all 4s;
+        } 
+    
+        &::before {
+            left: -30%;
+            transform: translate3d(0, 5em, 0) rotate(-340deg);
+        }
+    
+        &::after {
+            right: -30%;
+            transform: translate3d(0, 5em, 0) rotate(390deg);
+        }
+    
+        &:hover {
+            color: #fff;
+        }
+    
+        &:hover::before,
+        &:hover::after {
+            transform: none;
+            background-color: rgba(0, 0, 255, .75);
+        }
+    
+    }
+}
