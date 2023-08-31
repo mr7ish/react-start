@@ -51,10 +51,36 @@ const randomStyle = () => ({
     animationDuration: `${UseMath.getRangeRandom(1, 3)}s`
 })
 
+const randomImg = (random: number) => {
+    // console.log(random);
+    const imgs = [
+        '../../../public/tn_cat.png',
+        '../../../public/tn_dog.png',
+        '../../../public/tn_other.png'
+    ];
+    return imgs[random];
+}
+
+const generateImg = () => {
+    const img = document.createElement('img');
+    img.src = randomImg(UseMath.getRandom(2));
+    img.classList.add('drops-img');
+    return img;
+}
+
+const generateTypes = (random: number) => {
+    const types = [
+        'letters',
+        'imgs'
+    ];
+    return types[random];
+}
+
 const generateDrops = () => {
     const drops = document.createElement('div');
-    drops.textContent = getOneLetter() + '';
     drops.classList.add('drops-text');
+    const type = generateTypes(UseMath.getRandom(1));
+    type === 'letters' ? drops.textContent = getOneLetter() + '' : drops.appendChild(generateImg());
     Object.assign(drops.style, randomStyle());
     return drops;
 }
