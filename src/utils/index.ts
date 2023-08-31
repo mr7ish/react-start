@@ -10,7 +10,7 @@ export class UseMath {
      * @returns 0 ~ endpoint(contain)
      */
     static getRandom(endpoint: number) {
-        return Math.ceil(Math.random() * endpoint);
+        return Math.round(Math.random() * endpoint);
     }
     /**
      * 
@@ -20,7 +20,7 @@ export class UseMath {
      */
     static getRangeRandom(startpoint: number, endpoint: number) {
         const diff = Math.abs(startpoint - endpoint);
-        return Math.ceil(Math.random() * diff) + Math.min(startpoint, endpoint);
+        return Math.round(Math.random() * diff) + Math.min(startpoint, endpoint);
     }
 }
 
