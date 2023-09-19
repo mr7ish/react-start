@@ -53,10 +53,15 @@ const randomStyle = () => ({
 
 const randomImg = (random: number) => {
     // console.log(random);
+    // const imgs = 
+    //     '../../../public/tn_cat.png',
+    //     '../../../public/tn_dog.png',
+    //     '../../../public/tn_other.png'
+    // ];
     const imgs = [
-        '../../../public/tn_cat.png',
-        '../../../public/tn_dog.png',
-        '../../../public/tn_other.png'
+        '/tn_cat.png',
+        '/tn_dog.png',
+        '/tn_other.png'
     ];
     return imgs[random];
 }
