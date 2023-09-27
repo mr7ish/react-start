@@ -3,6 +3,6 @@
 // import Root from "./demo/PlaceTree";
 import Algorithems from './algorithms';
 // import CloudWrapper from './demo/cloud';
-// import WaveButton from './demo/wave-button';
+// import WaveButton from './demo/waveButton';
 
 export const App = () => <Algorithems />
