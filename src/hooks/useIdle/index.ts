@@ -55,6 +55,7 @@ export const useIdle = (options: UseIdleOptions = {}) => {
 
     const onEvent = () => {
         setLastActive(UseDate.timestamp());
+        setIdleTime(0);
         reset();
     }
 
@@ -127,7 +128,7 @@ export const useIdle = (options: UseIdleOptions = {}) => {
                     if(!document.hidden) onEvent(); 
                 });
             }
-            reset();
+            onEvent();
             setIsListening(true);
         }
     }
