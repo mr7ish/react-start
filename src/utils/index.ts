@@ -40,6 +40,13 @@ export class UseDate {
         console.log(`${endTime - startTime} ms`);
         return endTime - startTime;
     }
+    /**
+     * 
+     * @returns time stamp
+     */
+    static timestamp() {
+        return +Date.now();
+    }
 }
 
 type GetNumbersType = 'positive' | 'negative' | 'both';
@@ -204,3 +211,9 @@ export class UseIs {
         return this.isClient() && window?.navigator?.userAgent && /iP(ad|hone|od)/.test(window.navigator.userAgent);
     }
 }
+
+export const defaultWindow = /* #__PURE__ */ UseIs.isClient() ? window : undefined;
+export const defaultDocument = /* #__PURE__ */ UseIs.isClient() ? window.document : undefined;
+export const defaultNavigator = /* #__PURE__ */ UseIs.isClient() ? window.navigator : undefined;
+export const defaultLocation = /* #__PURE__ */ UseIs.isClient() ? window.location : undefined;
+
