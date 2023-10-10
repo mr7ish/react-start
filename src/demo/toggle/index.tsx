@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "../svg";
 import './index.less';
 
+type ToggleProps = {
+    backMode: (lightStatus: boolean) => void
+}
 
-const Toggle = () => {
+const Toggle: React.FC<ToggleProps> = ({
+    backMode
+}) => {
     const [isLight, setIsLight] = useState(true);
 
     const changeStyle = (_isLight: boolean) => {
@@ -13,7 +18,8 @@ const Toggle = () => {
 
     useEffect(() => {
         changeStyle(isLight);
-    }, [isLight]);
+        backMode(isLight)
+    }, [backMode, isLight]);
 
     const onToggle = () => {
         setIsLight(!isLight);
