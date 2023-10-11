@@ -4,7 +4,7 @@
 // import Algorithems from './algorithms';
 // import CloudWrapper from './demo/cloud';
 // import WaveButton from './demo/waveButton';
-import Idle from '@/hooks/useIdle/demo';
+import Idle from '@/hooks/useIdle/Demo';
 
 
 export const App = () => <Idle />
