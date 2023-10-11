@@ -1,4 +1,4 @@
-import { Stylus } from "../svg";
+import { Draw, Stylus } from "../svg";
 
 const ToolBar = () => {
 
@@ -8,11 +8,14 @@ const ToolBar = () => {
         {
             key: 'draw',
             title: '绘画',
-            icon: <Stylus />
+            padding: 8,
+            icon: <Draw />
         },
         {
             key: 'stylus',
             title: '手写',
+            padding: 10,
+            icon: <Stylus />
         },
         {
             key: 'line',
@@ -39,11 +42,13 @@ const ToolBar = () => {
     const renderToolbar = () => {
         return toolbar.map(tool => (
             <div
+                key={tool.key}
                 className="tool-icon"
                 title={tool.title}
                 style={{
                     width: toolIconSize,
-                    height: toolIconSize
+                    height: toolIconSize,
+                    padding: tool.padding
                 }}
             >
                 {tool.icon}
