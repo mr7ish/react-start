@@ -42,6 +42,7 @@ export const useIdle = (options: UseIdleOptions = {}) => {
     const cleanTimer = () => {
         if(timeoutTimer.current) {
             clearTimeout(timeoutTimer.current);
+            timeoutTimer.current = null;
         }
     }
 
@@ -104,7 +105,10 @@ export const useIdle = (options: UseIdleOptions = {}) => {
     );
 
     const stopInterval = () => {
-        if(intervalTimer.current) clearInterval(intervalTimer.current);
+        if(intervalTimer.current) {
+            clearInterval(intervalTimer.current);
+            intervalTimer.current = null;
+        }
     }
 
     useEffect(() => {
