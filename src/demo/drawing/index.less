@@ -21,18 +21,26 @@
 }
 
 .toolbar-wrapper {
-    width: 550px;
     height: 44px;
     background-color: #262627;
+    display: flex;
+    justify-content: center;
 
     .toolbar {
         height: 100%;
         display: flex;
-        gap: 1;
+        align-items: center;
+        gap: 10px;
 
 
         .tool-icon {
             border-radius: .5rem;
+            background-color: #4F4D6F;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #3D3D3D;
+            }
         }
     }
 

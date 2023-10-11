@@ -1,11 +1,14 @@
+import { Stylus } from "../svg";
 
 const ToolBar = () => {
 
+    const toolIconSize = 36;
 
     const toolbar = [
         {
             key: 'draw',
             title: '绘画',
+            icon: <Stylus />
         },
         {
             key: 'stylus',
@@ -35,8 +38,15 @@ const ToolBar = () => {
 
     const renderToolbar = () => {
         return toolbar.map(tool => (
-            <div className="tool-icon" title={tool.title}>
-
+            <div
+                className="tool-icon"
+                title={tool.title}
+                style={{
+                    width: toolIconSize,
+                    height: toolIconSize
+                }}
+            >
+                {tool.icon}
             </div>
         ))
     }
