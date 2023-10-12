@@ -16,43 +16,43 @@ const ToolBar = ({
             key: 'draw',
             title: '绘画',
             padding: (isFilled: boolean) => isFilled ? 8 : 6,
-            icon: (isFilled: boolean) => <Draw isFilled={isFilled} polygonFillColor="#B2AEFF" circleFillColor="#4F4D6F" borderFillColor="#4F4D6F" />,
+            icon: (isFilled: boolean) => <Draw isFilled={isFilled} polygonFillColor="#B2AEFF" circleFillColor="#4F4D6F" borderFillColor="#4F4D6F" borderUnfilledColor="#b8b8b8" />,
         },
         {
             key: 'stylus',
             title: '手写',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'line',
             title: '线',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'arrow',
             title: '箭头',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'rectangle',
             title: '矩形',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'ellipse',
             title: '椭圆',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'eraseLine',
             title: '擦除',
             padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" />
+            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
         }
     ];
 
