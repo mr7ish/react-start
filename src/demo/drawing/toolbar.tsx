@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Draw, Stylus } from "../svg";
+import { useEventListener } from "@/hooks/useEventListener";
 
 type ToolBarProps = {
     returnActiveKey?: (toolbarActiveKey: string) => void
@@ -75,6 +76,14 @@ const ToolBar = ({
         ))
     }
 
+    const stop = useEventListener(document, ['click'], [
+        () => {
+            console.log('click');
+        }
+    ]);
+
+
+
     return (
         <div className="toolbar-wrapper">
             <div
@@ -91,6 +100,7 @@ const ToolBar = ({
             >
                 {renderToolbar()}
             </div>
+            <button onClick={stop}>stop</button>
         </div>
     );
 }

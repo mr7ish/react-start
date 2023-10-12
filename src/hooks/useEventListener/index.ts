@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defaultWindow } from "@/utils";
 import { AnyFn, Fn } from "@/utils/types";
+import { useRef } from "react";
 
 export type Listener<T, E> = (this: T, event: E) => any;
 
@@ -65,8 +66,7 @@ export function useEventListener<Event extends keyof HTMLElementEventMap>(
 
 // implement
 export function useEventListener(...args: any[]) {
-
-    let target: (Window & typeof globalThis) | undefined;
+    let target: any;
     let events: string[];
     let listeners: AnyFn[];
     let options: boolean | AddEventListenerOptions | undefined;
@@ -82,17 +82,28 @@ export function useEventListener(...args: any[]) {
 
     const cleanups: Fn[] = [];
 
+
     const cleanup = () => {
+        console.log('clean =>', cleanups);
         cleanups.forEach(fn => fn());
         cleanups.length = 0;
     }
 
     const register = (el: any, event: string, listener: Listener<any, any>, option: AddEventListenerOptions | boolean | undefined) => {
         el.addEventListener(event, listener, option);
-        return () => el.removeEventListener(event, listener, option);
+        return () => {
+            console.log('el =>', el);
+            console.log('event =>', event);
+            console.log('listener =>', listener);
+            
+            el.removeEventListener(event, listener, option);
+        };
     }
-
+    
     const listen = () => {
+        console.log('mount');
+        
+        cleanup();
         cleanups.push(
             ...events.flatMap(event => {
                 return listeners.map(listener => register(target, event, listener, options));
@@ -101,6 +112,7 @@ export function useEventListener(...args: any[]) {
     }
 
     const stop = () => {
+        // console.log('clean =>', cleanups);
         cleanup();
     }
 
