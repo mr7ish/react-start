@@ -21,25 +21,31 @@
 }
 
 .toolbar-wrapper {
-    height: 44px;
     background-color: #262627;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
+    padding: 5px;
+    border-radius: .5rem;
+
 
     .toolbar {
-        height: 100%;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
 
 
         .tool-icon {
             border-radius: .5rem;
-            background-color: #4F4D6F;
+            // background-color: #4F4D6F;
             cursor: pointer;
+            transition: all .25s ease;
 
             &:hover {
                 background-color: #3D3D3D;
+            }
+
+            svg {
+                pointer-events: none;
             }
         }
     }
