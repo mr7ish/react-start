@@ -95,6 +95,11 @@ export function useEventListener(...args: any[]) {
         }, [cleanups]
     );
     
+    const register = (el: any, event: string, listener: Listener<any, any>, option: AddEventListenerOptions | boolean | undefined) => {
+        el.addEventListener(event, listener, option);
+        return () => el.removeEventListener(event, listener, option);
+    }
+
     const listen = useCallback(
         () => {
             cleanup();
@@ -105,11 +110,6 @@ export function useEventListener(...args: any[]) {
             );
         }, [cleanup, events, listeners, options, target]
     );
-
-    const register = (el: any, event: string, listener: Listener<any, any>, option: AddEventListenerOptions | boolean | undefined) => {
-        el.addEventListener(event, listener, option);
-        return () => el.removeEventListener(event, listener, option);
-    }
 
     const stop = () => {
         cleanup();
