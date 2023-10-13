@@ -1,5 +1,6 @@
 import { UseIs, defaultWindow } from "@/utils";
-import { useState } from "react"
+import { useCallback, useState } from "react"
+import { useEventListener } from "../useEventListener";
 
 type Position = {
     x: number
@@ -26,7 +27,7 @@ type UseDraggableOptions = {
      */
     capture?: boolean
     /**
-     * element to attach events
+     * element to attach pointer move and up events during dragging)
      */
     draggingElement?: HTMLElement | SVGElement | Window | Document | null | undefined
     /**
@@ -34,7 +35,8 @@ type UseDraggableOptions = {
      */    
     containerElement?: HTMLElement | SVGElement | null | undefined
     /**
-     * 
+     * element to trigger the drag event
+     * @default target
      */
     handle?: HTMLElement | SVGElement | null | undefined
     /**
@@ -45,18 +47,23 @@ type UseDraggableOptions = {
      * init position of the element
      */
     initPosition?: Position
-
-
-    onStart?: (position: Position, event: PointerEvent) => void | false
-
-    onMove?: (position: Position, event: PointerEvent) => void
-    
-    onEnd?: (position: Position, event: PointerEvent) => void
-
+    /**
+     * the direction that you can move
+     */
     axis?: 'x' | 'y' | 'both'
-
+    /**
+     * callback when the dragging start and return false to prevent dragging
+     */
+    onStart?: (position: Position, event: PointerEvent) => void | false
+    /**
+     * callback during dragging
+     */
+    onMove?: (position: Position, event: PointerEvent) => void
+    /**
+     * callback when the dragging end
+     */
+    onEnd?: (position: Position, event: PointerEvent) => void
 }
-
 
 export const useDraggable = (
     target: HTMLElement | SVGElement | null | undefined,
@@ -132,10 +139,60 @@ export const useDraggable = (
         onEnd?.(position, e);
         handleEvent(e);
     }
+    const config = { capture };
 
-    if(UseIs.isClient()) {
-        
+    const { listen: pointerdownListen, stop: pointerdownStop } = useEventListener(draggingHandle as HTMLElement, 'pointerdown', start, config);
+    const { listen: pointermoveListen, stop: pointermoveStop } = useEventListener(draggingElement as HTMLElement, 'pointermove', move, config);
+    const { listen: pointerupListen, stop: pointerupStop } = useEventListener(draggingElement as HTMLElement, 'pointerup', end, config);
 
+    const unmount = useCallback(
+        () => {
+            // console.log('unmount');
+            pointerdownStop();
+            pointermoveStop();
+            pointerupStop();
+        }, 
+        [pointerdownStop, pointermoveStop, pointerupStop]
+    );
+
+    const mount = useCallback(
+        () => {
+            unmount();
+            if(UseIs.isClient()) {
+                // console.log('mount');
+                pointerdownListen();
+                pointermoveListen();
+                pointerupListen();
+            }
+        },
+        [pointerdownListen, pointermoveListen, pointerupListen, unmount]
+    );
+
+    // const unmount = () => {
+    //     pointerdownStop();
+    //     pointermoveStop();
+    //     pointerupStop();
+    // }
+
+    // const mount = () => {
+    //     unmount();
+    //     pointerdownListen();
+    //     pointermoveListen();
+    //     pointerupListen();
+    // }
+
+    // useEffect(() => {
+    //     if(UseIs.isClient()) {
+    //         mount();
+    //         console.log(target);
+    //     }
+    // },[target]);
+
+    return {
+        ...position,
+        position,
+        isDragging: !!pressedDelta,
+        mount,
+        unmount
     }
-
 }
