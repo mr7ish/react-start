@@ -86,6 +86,27 @@ export function useEventListener(...args: any[]) {
     if(!Array.isArray(listeners))
         listeners = [listeners];
 
+    // const cleanups: Fn[] = [];
+    
+    // const cleanup =  () => {
+    //     cleanups.forEach(fn => fn());
+    //     cleanups.length = 0;
+    // }
+
+    // const listen = () => {
+    //     cleanup();
+    //     cleanups.push(
+    //         ...(events as string[]).flatMap(event => {
+    //             return (listeners as AnyFn[]).map(listener => register(target, event, listener, options));
+    //         })
+    //     );
+    // }
+
+    const register = (el: any, event: string, listener: Listener<any, any>, option: AddEventListenerOptions | boolean | undefined) => {
+        el.addEventListener(event, listener, option);
+        return () => el.removeEventListener(event, listener, option);
+    }
+
     const cleanups = useRef<Fn[]>([]);
 
     const cleanup = useCallback(
@@ -94,11 +115,6 @@ export function useEventListener(...args: any[]) {
             cleanups.current.length = 0;
         }, [cleanups]
     );
-    
-    const register = (el: any, event: string, listener: Listener<any, any>, option: AddEventListenerOptions | boolean | undefined) => {
-        el.addEventListener(event, listener, option);
-        return () => el.removeEventListener(event, listener, option);
-    }
 
     const listen = useCallback(
         () => {
@@ -115,7 +131,7 @@ export function useEventListener(...args: any[]) {
         cleanup();
     }
 
-    console.log('remount');
+    // console.log('init eventListener');
     
     if(!target) return {
         listen: () => {},
