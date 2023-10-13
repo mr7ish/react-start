@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Draw, Stylus } from "../svg";
 import { useDraggable } from "@/hooks/useDraggable";
+import { DrawingMode } from "drauu";
 
 type ToolBarProps = {
-    returnActiveKey?: (toolbarActiveKey: string) => void
+    initMode?: DrawingMode
+    returnActiveKey?: (toolbarActiveKey: DrawingMode) => void
 }
 
 const ToolBar = ({
+    initMode = 'draw',
     returnActiveKey
 }: ToolBarProps) => {
     const toolIconSize = 36;
-    const [activeKey, setActiveKey] = useState<string>('draw');
+    const [activeKey, setActiveKey] = useState<DrawingMode>(initMode);
 
     const [activeDragging, setActiveDragging] = useState<boolean>(false);
 
@@ -80,7 +83,7 @@ const ToolBar = ({
         ))
     }
 
-    const { isDragging, position, x, y, mount, unmount } = useDraggable(toobarRef.current as unknown as HTMLElement, { initPosition: { x: 100, y: 100 }, });
+    const { x, y, mount, unmount } = useDraggable(toobarRef.current as unknown as HTMLElement, { initPosition: { x: document.documentElement.clientWidth / 2 - 105, y: 10 }, });
 
     // useEffect(() => {
     //     console.log('isDragging =>', isDragging);
@@ -112,7 +115,7 @@ const ToolBar = ({
             <div
                 className="toolbar"
                 onClick={(e) => {
-                    const key = (e.target as HTMLElement).dataset['key'] ?? '';
+                    const key = ((e.target as HTMLElement).dataset['key'] ?? 'draw') as DrawingMode;
                     if (key && activeKey !== key) {
                         console.log(key);
                         setActiveKey(key);
