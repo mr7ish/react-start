@@ -17,7 +17,7 @@ const Drawing = () => {
                 dasharray: '10 10'
             },
         });
-        console.log(drauu);
+        // console.log(drauu);
         return () => {
             drauu.current = null;
         }

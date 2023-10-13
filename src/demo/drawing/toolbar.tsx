@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Draw, Stylus } from "../svg";
-import { useEventListener } from "@/hooks/useEventListener";
+import { useDraggable } from "@/hooks/useDraggable";
 
 type ToolBarProps = {
     returnActiveKey?: (toolbarActiveKey: string) => void
@@ -11,6 +11,10 @@ const ToolBar = ({
 }: ToolBarProps) => {
     const toolIconSize = 36;
     const [activeKey, setActiveKey] = useState<string>('draw');
+
+    const [activeDragging, setActiveDragging] = useState<boolean>(false);
+
+    const toobarRef = useRef<HTMLDivElement | null>(null);
 
     const toolbar = [
         {
@@ -57,7 +61,7 @@ const ToolBar = ({
         }
     ];
 
-    const renderToolbar = () => {
+    const renderToolbarIcons = () => {
         return toolbar.map(tool => (
             <div
                 key={tool.key}
@@ -76,16 +80,35 @@ const ToolBar = ({
         ))
     }
 
-    const stop = useEventListener(document, ['click'], [
-        () => {
-            console.log('click');
+    const { isDragging, position, x, y, mount, unmount } = useDraggable(toobarRef.current as unknown as HTMLElement, { initPosition: { x: 100, y: 100 }, });
+
+    // useEffect(() => {
+    //     console.log('isDragging =>', isDragging);
+    //     console.log('position =>', position);
+    // }, [isDragging, position]);
+
+    useEffect(() => {
+        mount();
+        return () => {
+            // console.log('unmount previous');
+            unmount();
         }
-    ]);
-
-
+    }, [mount, unmount]);
 
     return (
-        <div className="toolbar-wrapper">
+        <div
+            ref={toobarRef}
+            className="toolbar-wrapper"
+            style={{
+                left: `${x}px`,
+                top: `${y}px`,
+            }}
+            onPointerEnter={
+                () => {
+                    if (!activeDragging) setActiveDragging(true);
+                }
+            }
+        >
             <div
                 className="toolbar"
                 onClick={(e) => {
@@ -95,12 +118,10 @@ const ToolBar = ({
                         setActiveKey(key);
                         returnActiveKey?.(key);
                     }
-
                 }}
             >
-                {renderToolbar()}
+                {renderToolbarIcons()}
             </div>
-            <button onClick={stop}>stop</button>
         </div>
     );
 }
