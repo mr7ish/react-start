@@ -1,5 +1,5 @@
 import { DrawingMode, createDrauu } from "drauu";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import './index.less';
 import type { Drauu } from "@drauu/core";
 import ToolBar from "./toolbar";
@@ -17,7 +17,10 @@ const Drawing = () => {
                 color: 'skyblue',
                 size: 5,
                 mode,
-                dasharray: '10 10'
+                // dash line
+                // dasharray: '10 10',
+                // dash-dotted line
+                // dasharray: '1 10'
             },
         });
         // console.log(drauu);
@@ -27,11 +30,16 @@ const Drawing = () => {
         }
     }, []);
 
+    const setBrushMode = useCallback(
+        () => {
+            drauu.current!.brush.mode = mode;
+        }, [mode]
+    );
 
     useEffect(() => {
         if (!drauu.current) return;
-        drauu.current.brush.mode = mode;
-    }, [mode]);
+        setBrushMode();
+    }, [mode, setBrushMode]);
 
     return (
         <div className="drawing-wrapper">

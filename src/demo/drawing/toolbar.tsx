@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Draw, Stylus } from "../svg";
+import { Arrow, Draw, Ellipse, Line, Rectangle, Stylus } from "../svg";
 import { useDraggable } from "@/hooks/useDraggable";
 import { DrawingMode } from "drauu";
 
@@ -35,26 +35,26 @@ const ToolBar = ({
         {
             key: 'line',
             title: '线',
-            padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
+            padding: (isFilled: boolean) => isFilled ? 10 : 8,
+            icon: (isFilled: boolean) => <Line borderColor={isFilled ? '#B2AEFF' : '#b8b8b8'} />
         },
         {
             key: 'arrow',
             title: '箭头',
-            padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
+            padding: (isFilled: boolean) => isFilled ? 11 : 10,
+            icon: (isFilled: boolean) => <Arrow borderColor={isFilled ? '#B2AEFF' : '#b8b8b8'} />
         },
         {
             key: 'rectangle',
             title: '矩形',
-            padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
+            padding: (isFilled: boolean) => isFilled ? 10 : 9,
+            icon: (isFilled: boolean) => <Rectangle isFilled={isFilled} polygonFillColor="#B2AEFF" borderFillColor="#B2AEFF" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'ellipse',
             title: '椭圆',
-            padding: (isFilled: boolean) => isFilled ? 10 : 6.5,
-            icon: (isFilled: boolean) => <Stylus isFilled={isFilled} polygonFillColor="#F4A833" rectFillColor="#D85F1E" borderFillColor="#000" borderUnfilledColor="#b8b8b8" />
+            padding: (isFilled: boolean) => isFilled ? 10 : 9,
+            icon: (isFilled: boolean) => <Ellipse isFilled={isFilled} ellipseFillColor="#B2AEFF" borderFillColor="#B2AEFF" borderUnfilledColor="#b8b8b8" />
         },
         {
             key: 'eraseLine',
