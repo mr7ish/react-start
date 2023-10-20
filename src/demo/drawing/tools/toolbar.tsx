@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Arrow, Draw, Ellipse, Line, Rectangle, Stylus } from "../svg";
+import { Arrow, Draw, Ellipse, Line, Rectangle, Stylus } from "../../svg";
 import { useDraggable } from "@/hooks/useDraggable";
 import { DrawingMode } from "drauu";
+import './index.less';
+
+export type Mode = DrawingMode | 'arrow'
 
 type ToolBarProps = {
-    initMode?: DrawingMode
-    returnActiveKey?: (toolbarActiveKey: DrawingMode) => void
+    initMode?: Mode
+    returnActiveKey?: (toolbarActiveKey: Mode) => void
 }
 
 const ToolBar = ({
@@ -13,7 +16,7 @@ const ToolBar = ({
     returnActiveKey
 }: ToolBarProps) => {
     const toolIconSize = 36;
-    const [activeKey, setActiveKey] = useState<DrawingMode>(initMode);
+    const [activeKey, setActiveKey] = useState<Mode>(initMode);
 
     const [activeDragging, setActiveDragging] = useState<boolean>(false);
 
