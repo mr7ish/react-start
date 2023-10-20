@@ -1,0 +1,59 @@
+.toolbar-wrapper {
+    background-color: #262627;
+    display: inline-flex;
+    justify-content: center;
+    padding: 5px;
+    border-radius: .5rem;
+    position: fixed;
+    cursor: grab;
+
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .tool-icon {
+            border-radius: .5rem;
+            // background-color: #4F4D6F;
+            cursor: pointer;
+            transition: all .25s ease;
+
+            &:hover {
+                background-color: #3D3D3D;
+            }
+
+            svg {
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+.range-slider-wrapper {
+    .range-slider-label, .range-slider-input {
+        display: block;
+    }
+
+    // style of line
+    .range-slider-input {
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+        // if need to custom this line
+        // appearance: none;
+        border-radius: 5px;
+
+        // style of block
+        &::-webkit-slider-thumb {
+            // if need to custom this block
+            // appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            // -webkit-box-shadow: 0 0 20px;
+            background-color: #262627;
+            // background: url();
+        }
+    }
+}
