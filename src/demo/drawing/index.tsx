@@ -2,21 +2,30 @@ import { DrawingMode, createDrauu } from "drauu";
 import { useCallback, useEffect, useRef, useState } from "react";
 import './index.less';
 import type { Drauu } from "@drauu/core";
-import ToolBar from "./toolbar";
+import ToolBar, { Mode } from "./tools/toolbar";
+import RangeSlider from "./tools/range-slider";
 
+// TODO color
+// TODO size
+// TODO fill
+// TODO dasharray
+// TODO cornerRadius
+// TODO stylusOptions
 
 const Drawing = () => {
     const drauu = useRef<Drauu | null>(null);
 
-    const [mode, setMode] = useState<DrawingMode>('stylus');
+    const [mode, setMode] = useState<Mode>('stylus');
 
     useEffect(() => {
+        // init drauu when component mount 
         drauu.current = createDrauu({
             el: '.drawing-wrapper #drawing-area',
             brush: {
                 color: 'skyblue',
                 size: 5,
-                mode,
+                mode: mode as DrawingMode,
+                arrowEnd: false
                 // dash line
                 // dasharray: '10 10',
                 // dash-dotted line
@@ -32,6 +41,14 @@ const Drawing = () => {
 
     const setBrushMode = useCallback(
         () => {
+            if (mode === 'arrow') {
+                drauu.current!.brush.mode = 'line';
+                drauu.current!.brush.arrowEnd = true;
+                return;
+            }
+            if (drauu.current!.brush.arrowEnd) {
+                drauu.current!.brush.arrowEnd = false;
+            }
             drauu.current!.brush.mode = mode;
         }, [mode]
     );
@@ -54,6 +71,7 @@ const Drawing = () => {
                 />
             </div>
 
+            <RangeSlider />
 
             <svg id="drawing-area"></svg>
 
