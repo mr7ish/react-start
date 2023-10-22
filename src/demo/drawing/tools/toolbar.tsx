@@ -86,7 +86,7 @@ const ToolBar = ({
         ))
     }
 
-    const { x, y, mount, unmount } = useDraggable(toobarRef.current as unknown as HTMLElement, { initPosition: { x: document.documentElement.clientWidth / 2 - 105, y: 10 }, });
+    const { x, y, mount, unmount } = useDraggable(toobarRef.current as unknown as HTMLElement, { initPosition: { x: document.documentElement.clientWidth / 2 - 105, y: 10 }, exact: true });
 
     // useEffect(() => {
     //     console.log('isDragging =>', isDragging);
