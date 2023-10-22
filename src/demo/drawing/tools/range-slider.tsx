@@ -6,12 +6,14 @@ type RangeSliderProps = {
     max?: number
     step?: number
     label?: string
+    initValue?: number
     width?: number | string
     /**
      * the range for number is 0 - 10
      */
     height?: number
     backgroundColor?: string
+    returnRangeValue: (rangeValue: number) => void
 }
 
 const RangeSlider = ({
@@ -20,15 +22,18 @@ const RangeSlider = ({
     step = 10,
     backgroundColor = '#0075FF',
     label = 'slider',
+    initValue = 0,
     width = 175,
     height = 10,
+    returnRangeValue
 }: RangeSliderProps) => {
 
-    const [value, setValue] = useState<number>(0);
+    const [value, setValue] = useState<number>(initValue);
 
     const changeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
         const targetValue = e.target.valueAsNumber ?? 0;
         setValue(targetValue);
+        returnRangeValue(targetValue);
     }
 
     const usableValue = useMemo(() => {
