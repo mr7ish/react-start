@@ -217,3 +217,13 @@ export const defaultDocument = /* #__PURE__ */ UseIs.isClient() ? window.documen
 export const defaultNavigator = /* #__PURE__ */ UseIs.isClient() ? window.navigator : undefined;
 export const defaultLocation = /* #__PURE__ */ UseIs.isClient() ? window.location : undefined;
 
+/**
+ * if the condition is true and the function will be executed
+ * @param executedCondition 
+ * @param toBeExecutedFn 
+ * @returns 
+ */
+export const callFnSecurely = (executedCondition?: boolean | null | undefined, toBeExecutedFn?: AnyFn) => {
+    if(!executedCondition) return;
+    toBeExecutedFn?.();
+}
