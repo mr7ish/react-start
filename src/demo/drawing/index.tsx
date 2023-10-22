@@ -4,6 +4,8 @@ import './index.less';
 import type { Drauu } from "@drauu/core";
 import ToolBar, { Mode } from "./tools/toolbar";
 import RangeSlider from "./tools/range-slider";
+import { callFnSecurely } from "@/utils";
+import ParamsPanel from "./tools/params-panel";
 
 // TODO color
 // TODO size
@@ -11,11 +13,15 @@ import RangeSlider from "./tools/range-slider";
 // TODO dasharray
 // TODO cornerRadius
 // TODO stylusOptions
+// TODO ctrl z/y
+
+
 
 const Drawing = () => {
     const drauu = useRef<Drauu | null>(null);
 
     const [mode, setMode] = useState<Mode>('stylus');
+    const [brushSize, setBrushSize] = useState<number>(5);
 
     useEffect(() => {
         // init drauu when component mount 
@@ -23,7 +29,7 @@ const Drawing = () => {
             el: '.drawing-wrapper #drawing-area',
             brush: {
                 color: 'skyblue',
-                size: 5,
+                size: brushSize,
                 mode: mode as DrawingMode,
                 arrowEnd: false
                 // dash line
@@ -37,6 +43,7 @@ const Drawing = () => {
             console.log('clear drauu');
             drauu.current = null;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const setBrushMode = useCallback(
@@ -53,10 +60,19 @@ const Drawing = () => {
         }, [mode]
     );
 
+    const setBrushThickness = useCallback(
+        () => {
+            drauu.current!.brush.size = brushSize;
+        }, [brushSize]
+    );
+
     useEffect(() => {
-        if (!drauu.current) return;
-        setBrushMode();
-    }, [mode, setBrushMode]);
+        callFnSecurely(!!drauu.current, setBrushMode);
+    }, [setBrushMode]);
+
+    useEffect(() => {
+        callFnSecurely(!!drauu.current, setBrushThickness);
+    }, [setBrushThickness]);
 
     return (
         <div className="drawing-wrapper">
@@ -65,13 +81,22 @@ const Drawing = () => {
                     initMode={mode}
                     returnActiveKey={(activeKey) => {
                         console.log('activeKey =>', activeKey);
-
                         setMode(activeKey);
                     }}
                 />
             </div>
 
-            <RangeSlider />
+            <RangeSlider 
+                min={1}
+                max={50}
+                step={1}
+                initValue={brushSize}
+                returnRangeValue={(rangeValue) => {
+                    setBrushSize(rangeValue);
+                }}
+            />
+
+            <ParamsPanel />
 
             <svg id="drawing-area"></svg>
 
