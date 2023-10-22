@@ -57,3 +57,33 @@
         }
     }
 }
+
+.params-panel-wrapper {
+    position: absolute;
+    padding: 8px;
+    border-radius: .5rem;
+    background-color: lightblue;
+    width: 200px;
+    height: 600px;
+    // left: 16px;
+    top: 30%;
+    transform: translateY(-30%);
+    transition: left .25s ;
+
+    .toggle-btn {
+        width: 36px;
+        height: 36px;
+        position: absolute;
+        top: -44px;
+        left: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #232329;
+        border-radius: .5rem;
+        cursor: pointer;
+        &:hover {
+            background-color: #363541;
+        }
+    }
+}
