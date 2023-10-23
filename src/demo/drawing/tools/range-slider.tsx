@@ -13,7 +13,7 @@ type RangeSliderProps = {
      */
     height?: number
     backgroundColor?: string
-    returnRangeValue: (rangeValue: number) => void
+    returnRangeValue?: (rangeValue: number) => void
 }
 
 const RangeSlider = ({
@@ -33,7 +33,7 @@ const RangeSlider = ({
     const changeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
         const targetValue = e.target.valueAsNumber ?? 0;
         setValue(targetValue);
-        returnRangeValue(targetValue);
+        returnRangeValue?.(targetValue);
     }
 
     const usableValue = useMemo(() => {

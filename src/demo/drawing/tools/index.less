@@ -65,17 +65,20 @@
     background-color: lightblue;
     width: 200px;
     height: 600px;
-    // left: 16px;
     top: 30%;
     transform: translateY(-30%);
     transition: left .25s ;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     .toggle-btn {
         width: 36px;
         height: 36px;
+        padding: 10px;
         position: absolute;
-        top: -44px;
-        left: 0px;
+        top: 0px;
+        right: -44px;
         display: flex;
         justify-content: center;
         align-items: center;

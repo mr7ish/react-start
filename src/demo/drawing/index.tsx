@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import './index.less';
 import type { Drauu } from "@drauu/core";
 import ToolBar, { Mode } from "./tools/toolbar";
-import RangeSlider from "./tools/range-slider";
 import { callFnSecurely } from "@/utils";
 import ParamsPanel from "./tools/params-panel";
 
@@ -43,7 +42,7 @@ const Drawing = () => {
             console.log('clear drauu');
             drauu.current = null;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const setBrushMode = useCallback(
@@ -86,17 +85,14 @@ const Drawing = () => {
                 />
             </div>
 
-            <RangeSlider 
-                min={1}
-                max={50}
-                step={1}
-                initValue={brushSize}
-                returnRangeValue={(rangeValue) => {
-                    setBrushSize(rangeValue);
+            <ParamsPanel
+                brushSizeRangeSlider={{
+                    initValue: brushSize,
+                    returnRangeValue(rangeValue) {
+                        setBrushSize(rangeValue);
+                    }
                 }}
             />
-
-            <ParamsPanel />
 
             <svg id="drawing-area"></svg>
 
