@@ -7,7 +7,7 @@ import { callFnSecurely } from "@/utils";
 import ParamsPanel from "./tools/params-panel";
 
 // TODO color
-// TODO size
+// TODO size ✔
 // TODO fill
 // TODO dasharray
 // TODO cornerRadius
