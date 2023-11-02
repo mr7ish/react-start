@@ -5,6 +5,7 @@ import type { Drauu } from "@drauu/core";
 import ToolBar, { Mode } from "./tools/toolbar";
 import { callFnSecurely } from "@/utils";
 import ParamsPanel from "./tools/params-panel";
+import Toggle from "../toggle";
 
 // TODO color
 // TODO size ✔
@@ -17,17 +18,20 @@ import ParamsPanel from "./tools/params-panel";
 
 
 const Drawing = () => {
+    const [isLight, setIsLight] = useState(true);
+
     const drauu = useRef<Drauu | null>(null);
 
     const [mode, setMode] = useState<Mode>('stylus');
     const [brushSize, setBrushSize] = useState<number>(5);
+    const [brushColor, setBrushColor] = useState<string>('#87CEEB');
 
     useEffect(() => {
         // init drauu when component mount 
         drauu.current = createDrauu({
             el: '.drawing-wrapper #drawing-area',
             brush: {
-                color: 'skyblue',
+                color: brushColor,
                 size: brushSize,
                 mode: mode as DrawingMode,
                 arrowEnd: false
@@ -65,6 +69,12 @@ const Drawing = () => {
         }, [brushSize]
     );
 
+    const setBrushColorTheme = useCallback(
+        () => {
+            drauu.current!.brush.color = brushColor;
+        }, [brushColor]
+    );
+
     useEffect(() => {
         callFnSecurely(!!drauu.current, setBrushMode);
     }, [setBrushMode]);
@@ -73,8 +83,13 @@ const Drawing = () => {
         callFnSecurely(!!drauu.current, setBrushThickness);
     }, [setBrushThickness]);
 
+    useEffect(() => {
+        callFnSecurely(!!drauu.current, setBrushColorTheme);
+    }, [setBrushColorTheme]);
+
     return (
         <div className="drawing-wrapper">
+            <Toggle backMode={(_isLight) => { setIsLight(_isLight) }} />
             <div className="toolbar">
                 <ToolBar
                     initMode={mode}
@@ -92,6 +107,13 @@ const Drawing = () => {
                         setBrushSize(rangeValue);
                     }
                 }}
+                brushColorColorPicker={{
+                    initColor: brushColor,
+                    returnColor(color) {
+                        setBrushColor(color);
+                    }
+                }}
+                isLight={isLight}
             />
 
             <svg id="drawing-area"></svg>

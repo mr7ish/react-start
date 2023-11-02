@@ -1,32 +1,92 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 type ColorPickerProps = {
-    test?: string
+    isLight?: boolean
+    initColor?: string
+    returnColor?: (color: string) => void
 }
 
 const ColorPicker = ({
-    test
+    isLight = true,
+    initColor = '#87CEEB',
+    returnColor
 }: ColorPickerProps) => {
+
+    const initActive = useCallback(() => {
+        return isLight ? 'black' : 'white'
+    }, [isLight]);
 
     const colorBlocks = useCallback(
         () => {
             return [
+                {
+                    key: `${isLight ? 'black' : 'white'}`,
+                    color: `${isLight ? '#000000' : '#ffffff'}`
+                },
                 {
                     key: 'pink',
                     color: '#FF8DBC'
                 },
                 {
                     key: 'skyblue',
-                    color: 'skyblue'
-                }
+                    color: '#87CEEB'
+                },
+                {
+                    key: 'green',
+                    color: '#68BC00'
+                },
+                {
+                    key: 'orange',
+                    color: '#FE9200'
+                },
             ];
-        }, []
+        }, [isLight]
+    );
+
+    const initColorValue = useCallback(() => {
+        return colorBlocks().find(block => block.color === initColor || block.key === initColor)?.key ?? initActive();
+    }, [colorBlocks, initActive, initColor]);
+
+    const [activeKey, setActiveKey] = useState<string>(initColorValue());
+
+    const renderColorBlocks = useCallback(
+        () => {
+            return colorBlocks().map(block => (
+                <div
+                    key={block.key}
+                    title={block.key}
+                    data-key={block.key}
+                    style={{
+                        width: '21px',
+                        height: '21px',
+                        borderRadius: '0.25rem',
+                        backgroundColor: block.color,
+                        border: '1px solid #d6d6d6',
+                        cursor: 'pointer',
+                        boxShadow: activeKey === block.key ? '0 0 0 1px #beb9ff' : 'none'
+                    }}
+
+                ></div>
+            ));
+        }, [activeKey, colorBlocks]
     );
 
     return (
         <div className="color-picker-wrapper">
-
-
+            <div
+                className="color-blocks"
+                onClick={(e) => {
+                    const key = (e.target as HTMLDivElement).dataset['key'];
+                    console.log(key);
+                    if (key && activeKey !== key) {
+                        setActiveKey(key);
+                        returnColor?.(colorBlocks().find(block => block.key === key)?.color ?? '');
+                    }
+                }}
+            >
+                {renderColorBlocks()}
+            </div>
+            <div className="color-picker"></div>
         </div>
     );
 }
