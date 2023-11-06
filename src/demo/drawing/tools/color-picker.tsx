@@ -56,19 +56,20 @@ const ColorPicker = ({
                     key={block.key}
                     title={block.key}
                     data-key={block.key}
+                    className={isLight ? activeKey === block.key ? 'block-light-active' : '' : activeKey === block.key ? 'block-dark-active' : ''}
                     style={{
                         width: '21px',
                         height: '21px',
                         borderRadius: '0.25rem',
                         backgroundColor: block.color,
-                        border: '1px solid #d6d6d6',
+                        // border: '1px solid #d6d6d6',
                         cursor: 'pointer',
-                        boxShadow: activeKey === block.key ? '0 0 0 1px #beb9ff' : 'none'
+                        // boxShadow: activeKey === block.key ? `2px 2px 2px 1px ${block.key !== 'black' ? 'rgba(0, 0, 0, 0.2)' : ''} inset` : 'none'
                     }}
 
                 ></div>
             ));
-        }, [activeKey, colorBlocks]
+        }, [activeKey, colorBlocks, isLight]
     );
 
     return (
