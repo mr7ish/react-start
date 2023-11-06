@@ -49,6 +49,19 @@ const ColorPicker = ({
 
     const [activeKey, setActiveKey] = useState<string>(initColorValue());
 
+    const diffClassName = useCallback(
+        (_block: { key: string, color: string }) => {
+            if (isLight) {
+                if (activeKey === _block.key && _block.key === 'black') return 'block-light-active_black';
+                else if (activeKey === _block.key && _block.key !== 'black') return 'block-light-active';
+                else return '';
+            } else {
+                if (activeKey === _block.key) return 'block-dark-active';
+                else return '';
+            }
+        }, [activeKey, isLight]
+    );
+
     const renderColorBlocks = useCallback(
         () => {
             return colorBlocks().map(block => (
@@ -56,20 +69,18 @@ const ColorPicker = ({
                     key={block.key}
                     title={block.key}
                     data-key={block.key}
-                    className={isLight ? activeKey === block.key ? 'block-light-active' : '' : activeKey === block.key ? 'block-dark-active' : ''}
+                    className={diffClassName(block)}
                     style={{
                         width: '21px',
                         height: '21px',
                         borderRadius: '0.25rem',
                         backgroundColor: block.color,
-                        // border: '1px solid #d6d6d6',
                         cursor: 'pointer',
-                        // boxShadow: activeKey === block.key ? `2px 2px 2px 1px ${block.key !== 'black' ? 'rgba(0, 0, 0, 0.2)' : ''} inset` : 'none'
                     }}
 
                 ></div>
             ));
-        }, [activeKey, colorBlocks, isLight]
+        }, [colorBlocks, diffClassName]
     );
 
     return (
