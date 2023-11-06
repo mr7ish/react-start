@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type ColorPickerProps = {
     isLight?: boolean
@@ -49,6 +49,13 @@ const ColorPicker = ({
 
     const [activeKey, setActiveKey] = useState<string>(initColorValue());
 
+    // TO Check
+    useEffect(() => {
+        // console.log(initColorValue());
+        setActiveKey(initColorValue());
+        returnColor?.(initColorValue());
+    }, [initColorValue, returnColor])
+
     const diffClassName = useCallback(
         (_block: { key: string, color: string }) => {
             if (isLight) {
@@ -90,6 +97,8 @@ const ColorPicker = ({
                 onClick={(e) => {
                     const key = (e.target as HTMLDivElement).dataset['key'];
                     console.log(key);
+                    console.log(activeKey);
+
                     if (key && activeKey !== key) {
                         setActiveKey(key);
                         returnColor?.(colorBlocks().find(block => block.key === key)?.color ?? '');
