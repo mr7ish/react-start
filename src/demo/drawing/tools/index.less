@@ -105,8 +105,10 @@
 .color-picker-wrapper {
     display: flex;
     padding: .25rem 0;
+    justify-content: space-between;
     .color-blocks {
         display: flex;
+        flex-wrap: wrap;
         gap: 8px;
         .block-light-active {
             box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2) inset;
@@ -119,6 +121,22 @@
 
         .block-dark-active {
             box-shadow: rgb(224, 218, 209) 0px 0px 4px;
+        }
+    }
+
+    .color-picker {
+        position: relative;
+        .color-picker-setting {
+            &::before {
+                content: '';
+                display: block;
+                width: 1px;
+                height: 100%;
+                background-color: hsl(245, 10%, 21%);
+                position: absolute;
+                left: -10px;
+                top: 0;
+        }
         }
     }
 }
