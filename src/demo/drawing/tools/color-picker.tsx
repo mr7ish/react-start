@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 
 type ColorPickerProps = {
     isLight?: boolean
@@ -39,6 +39,10 @@ const ColorPicker = ({
                     key: 'orange',
                     color: '#FE9200'
                 },
+                // {
+                //     key: 'violet',
+                //     color: '#9c27b0'
+                // },
             ];
         }, [isLight]
     );
@@ -69,6 +73,21 @@ const ColorPicker = ({
         }, [activeKey, isLight]
     );
 
+    const commonStyle = useCallback(
+        (diffStyle: CSSProperties) => {
+            const common = {
+                width: '21px',
+                height: '21px',
+                borderRadius: '0.25rem',
+                cursor: 'pointer',
+            }
+            return {
+                ...common,
+                ...diffStyle
+            }
+        }, []
+    );
+
     const renderColorBlocks = useCallback(
         () => {
             return colorBlocks().map(block => (
@@ -77,17 +96,13 @@ const ColorPicker = ({
                     title={block.key}
                     data-key={block.key}
                     className={diffClassName(block)}
-                    style={{
-                        width: '21px',
-                        height: '21px',
-                        borderRadius: '0.25rem',
+                    style={commonStyle({
                         backgroundColor: block.color,
-                        cursor: 'pointer',
-                    }}
+                    })}
 
                 ></div>
             ));
-        }, [colorBlocks, diffClassName]
+        }, [colorBlocks, commonStyle, diffClassName]
     );
 
     return (
@@ -107,7 +122,13 @@ const ColorPicker = ({
             >
                 {renderColorBlocks()}
             </div>
-            <div className="color-picker"></div>
+            <div className="color-picker">
+                <div className="color-picker-setting"
+                    style={commonStyle({
+                        backgroundColor: colorBlocks().find(block => block.key === activeKey)?.color ?? ''
+                    })}
+                ></div>
+            </div>
         </div>
     );
 }
