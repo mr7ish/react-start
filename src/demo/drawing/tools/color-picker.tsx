@@ -1,4 +1,6 @@
-import { CSSProperties, useCallback, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import SettingPanel, { SettingPanelRef } from "./setting-panel";
+import { ChromePicker } from "react-color";
 
 type ColorPickerProps = {
     isLight?: boolean
@@ -39,10 +41,10 @@ const ColorPicker = ({
                     key: 'orange',
                     color: '#FE9200'
                 },
-                // {
-                //     key: 'violet',
-                //     color: '#9c27b0'
-                // },
+                {
+                    key: 'violet',
+                    color: '#9c27b0'
+                },
             ];
         }, [isLight]
     );
@@ -105,31 +107,69 @@ const ColorPicker = ({
         }, [colorBlocks, commonStyle, diffClassName]
     );
 
-    return (
-        <div className="color-picker-wrapper">
-            <div
-                className="color-blocks"
-                onClick={(e) => {
-                    const key = (e.target as HTMLDivElement).dataset['key'];
-                    console.log(key);
-                    console.log(activeKey);
+    const ColorSettingPanelRef = useRef<SettingPanelRef | null>(null);
 
-                    if (key && activeKey !== key) {
-                        setActiveKey(key);
-                        returnColor?.(colorBlocks().find(block => block.key === key)?.color ?? '');
-                    }
-                }}
-            >
-                {renderColorBlocks()}
+    const colorSettingPanelList = useCallback(() => {
+        return [
+            {
+                key: 'color-picker',
+                title: '色值选择器',
+                value: <ChromePicker />
+            }
+        ];
+    }, []);
+
+    const renderColorSettingPanel = useCallback(() => {
+        return colorSettingPanelList().map(setting => (
+            <div>
+                <div>{setting.title}</div>
+                <div>
+                    {setting.value}
+                </div>
             </div>
-            <div className="color-picker">
-                <div className="color-picker-setting"
-                    style={commonStyle({
-                        backgroundColor: colorBlocks().find(block => block.key === activeKey)?.color ?? ''
-                    })}
-                ></div>
+        ));
+    }, [colorSettingPanelList]);
+
+    return (
+        <>
+            <div className="color-picker-wrapper">
+                <div
+                    className="color-blocks"
+                    onClick={(e) => {
+                        const key = (e.target as HTMLDivElement).dataset['key'];
+                        console.log(key);
+                        console.log(activeKey);
+
+                        if (key && activeKey !== key) {
+                            setActiveKey(key);
+                            returnColor?.(colorBlocks().find(block => block.key === key)?.color ?? '');
+                        }
+                    }}
+                >
+                    {renderColorBlocks()}
+                </div>
+                <div className="color-setting">
+                    <div
+                        className="color-setting-line"
+                        style={{
+                            backgroundColor: isLight ? 'hsl(244, 100%, 97%)' : 'hsl(245, 10%, 21%)'
+                        }}
+                    >
+                    </div>
+                    <div className="color-setting-block"
+                        style={commonStyle({
+                            backgroundColor: colorBlocks().find(block => block.key === activeKey)?.color ?? ''
+                        })}
+                        onClick={() => {
+                            ColorSettingPanelRef.current?.clickEvt();
+                        }}
+                    ></div>
+                </div>
             </div>
-        </div>
+            <SettingPanel ref={ColorSettingPanelRef} >
+                {renderColorSettingPanel()}
+            </SettingPanel>
+        </>
     );
 }
 

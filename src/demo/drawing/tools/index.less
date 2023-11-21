@@ -32,7 +32,9 @@
 
 .range-slider-wrapper {
     padding: .25rem 0;
-    .range-slider-label, .range-slider-input {
+
+    .range-slider-label,
+    .range-slider-input {
         display: block;
     }
 
@@ -69,7 +71,7 @@
     height: 600px;
     top: 30%;
     transform: translateY(-30%);
-    transition: left .25s ;
+    transition: left .25s;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -78,6 +80,7 @@
         .fieldset-label {
             font-size: .75rem;
         }
+
         .fieldset-wrapper {
             margin-top: .25rem;
         }
@@ -96,6 +99,7 @@
         background-color: #232329;
         border-radius: .5rem;
         cursor: pointer;
+
         &:hover {
             background-color: #363541;
         }
@@ -106,14 +110,16 @@
     display: flex;
     padding: .25rem 0;
     justify-content: space-between;
+
     .color-blocks {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
+
         .block-light-active {
             box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2) inset;
         }
-        
+
         .block-light-active_black {
             box-shadow: 0px 0px 0px 2px #FF8DBC inset;
             box-shadow: 0px 0px 0px 2px #bebeff inset;
@@ -124,19 +130,16 @@
         }
     }
 
-    .color-picker {
+    .color-setting {
         position: relative;
-        .color-picker-setting {
-            &::before {
-                content: '';
-                display: block;
-                width: 1px;
-                height: 100%;
-                background-color: hsl(245, 10%, 21%);
-                position: absolute;
-                left: -10px;
-                top: 0;
-        }
+        display: flex;
+
+        .color-setting-line {
+            width: 1px;
+            height: 100%;
+            position: absolute;
+            left: -10px;
+            top: 0;
         }
     }
 }
