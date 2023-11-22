@@ -2,7 +2,9 @@ import { CSSProperties, ReactNode, forwardRef, useCallback, useImperativeHandle,
 
 type SettingPanelProps = {
     width?: string
+    widthAdaptive?: boolean
     height?: string
+    heightAdaptive?: boolean
     backgroundColor?: string
     triangleDirection?: 'top' | 'right' | 'bottom' | 'left',
     trianglePosition?: number
@@ -10,62 +12,117 @@ type SettingPanelProps = {
     children?: ReactNode
 }
 
+type SettingPanelPosition = {
+    top: number
+    left: number
+}
+
 export type SettingPanelRef = {
     show: () => void,
     hide: () => void,
-    clickEvt: () => void
+    clickEvt: (position: SettingPanelPosition) => void
 }
 
 const SettingPanel = forwardRef<SettingPanelRef, SettingPanelProps>(({
     width = '200px',
     height = '300px',
-    backgroundColor = 'lightblue',
+    widthAdaptive = false,
+    heightAdaptive = false,
+    backgroundColor = '#fff',
     triangleDirection = 'left',
     trianglePosition = 20,
-    triangleWidth = 10,
+    triangleWidth = 20,
     children
 }, ref) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
+    const [postion, setPosition] = useState<SettingPanelPosition>({
+        top: 0,
+        left: 0
+    })
+
     useImperativeHandle(ref, () => ({
         show: () => setIsOpen(true),
         hide: () => setIsOpen(false),
-        clickEvt: () => {
+        clickEvt: (position) => {
             if (isOpen) return setIsOpen(false);
-            else return setIsOpen(true);
+            else {
+                setIsOpen(true);
+                setPosition({ ...position })
+            }
         }
     }));
 
-    const genetateTriangle = useCallback((commonStyle: CSSProperties) => {
-        const triangleStyle = () => {
+    const generateTriangle = useCallback(() => {
+        const calcRotate = () => {
+            if (triangleDirection === 'top')
+                return 180;
+            else if (triangleDirection === 'right')
+                return -90;
+            else if (triangleDirection === 'bottom')
+                return 0;
+            else if (triangleDirection === 'left')
+                return 90;
+            return 90;
+        }
+
+        const calcPosition = () => {
             if (triangleDirection === 'top')
                 return {
-                    borderBottom: `${triangleWidth}px solid ${backgroundColor}`,
                     left: `${trianglePosition}px`,
-                    top: `-${trianglePosition - 1}px`,
-                };
+                    top: `-4px`,
+                }
             else if (triangleDirection === 'right')
                 return {
-                    borderLeft: `${triangleWidth}px solid ${backgroundColor}`,
                     right: `-${trianglePosition - 1}px`,
                     top: `${trianglePosition}px`,
-                };
+                }
             else if (triangleDirection === 'bottom')
                 return {
-                    borderTop: `${triangleWidth}px solid ${backgroundColor}`,
-                    bottom: `-${trianglePosition - 1}px`,
+                    bottom: `-4px`,
                     left: `${trianglePosition}px`,
                 };
             else if (triangleDirection === 'left')
                 return {
-                    borderRight: `${triangleWidth}px solid ${backgroundColor}`,
-                    left: `-${trianglePosition - 1}px`,
+                    left: `1px`,
                     top: `${trianglePosition}px`,
                 };
-            else return {}
+            else return {};
         }
-        return { ...commonStyle, ...triangleStyle() }
+
+        const triangleStyle = () => {
+            return {
+                ...calcPosition(),
+                position: 'absolute',
+                transformOrigin: '0px 0px',
+                transform: `translateY(50%) rotate(${calcRotate()}deg) translateX(-50%)`
+            }
+        }
+
+        return (
+            <span
+                style={triangleStyle() as CSSProperties}
+            >
+                <svg
+                    style={{
+                        width: `${triangleWidth}px`,
+                        height: `${triangleWidth / 2}px`,
+                        display: 'block',
+                        overflow: 'visible',
+                        fill: backgroundColor,
+                        filter: 'drop-shadow(rgba(0, 0, 0, 0.05) 0px 3px 2px)'
+                    }}
+                >
+                    <polygon
+                        style={{
+                            height: '100%'
+                        }}
+                        points={`0,0 ${triangleWidth},0 ${triangleWidth / 2},${triangleWidth / 2}`}>
+                    </polygon>
+                </svg>
+            </span>
+        )
     }, [backgroundColor, triangleDirection, trianglePosition, triangleWidth]);
 
     return (
@@ -76,14 +133,14 @@ const SettingPanel = forwardRef<SettingPanelRef, SettingPanelProps>(({
                 position: 'fixed',
                 left: '0',
                 top: '0',
-                transform: 'translate(250px, 100px)'
+                transform: `translate(${postion.left}px, ${postion.top}px)`
             }}
         >
             <div
                 className="setting-panel-content"
                 style={{
-                    width,
-                    height,
+                    width: widthAdaptive ? 'auto' : width,
+                    height: heightAdaptive ? 'auto' : height,
                     borderRadius: '0.5rem',
                     backgroundColor,
                     position: 'relative',
@@ -91,14 +148,7 @@ const SettingPanel = forwardRef<SettingPanelRef, SettingPanelProps>(({
                     boxShadow: 'rgba(0, 0, 0, 0.05) 0px 7px 14px, rgba(0, 0, 0, 0.08) 0px 0px 3.12708px, rgba(0, 0, 0, 0.17) 0px 0px 0.931014px',
                 }}
             >
-                <div className="triangle"
-                    style={genetateTriangle({
-                        position: 'absolute',
-                        width: '0',
-                        height: '0',
-                        border: `${triangleWidth}px solid transparent`,
-                    })}
-                ></div>
+                {generateTriangle()}
                 {children}
             </div>
         </div>

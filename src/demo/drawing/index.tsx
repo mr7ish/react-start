@@ -1,5 +1,5 @@
 import { DrawingMode, createDrauu } from "drauu";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import './index.less';
 import type { Drauu } from "@drauu/core";
 import ToolBar, { Mode } from "./tools/toolbar";
@@ -23,8 +23,11 @@ const Drawing = () => {
     const drauu = useRef<Drauu | null>(null);
 
     const [mode, setMode] = useState<Mode>('stylus');
-    const [brushSize, setBrushSize] = useState<number>(5);
-    const [brushColor, setBrushColor] = useState<string>('#87CEEB');
+    const initBrushSize = useMemo(() => 5, []);
+    const initColor = useMemo(() => '#87CEEB', []);
+    const [brushSize, setBrushSize] = useState<number>(initBrushSize);
+    const [brushColor, setBrushColor] = useState<string>(initColor);
+
 
     useEffect(() => {
         // init drauu when component mount 
@@ -102,14 +105,16 @@ const Drawing = () => {
 
             <ParamsPanel
                 brushSizeRangeSlider={{
-                    initValue: brushSize,
+                    initValue: initBrushSize,
                     returnRangeValue(rangeValue) {
                         setBrushSize(rangeValue);
                     }
                 }}
                 brushColorColorPicker={{
-                    initColor: brushColor,
+                    initColor,
                     returnColor(color) {
+                        console.log('color =>', color);
+
                         setBrushColor(color);
                     }
                 }}

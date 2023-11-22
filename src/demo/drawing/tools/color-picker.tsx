@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SettingPanel, { SettingPanelRef } from "./setting-panel";
 import { ChromePicker } from "react-color";
 
@@ -14,11 +14,11 @@ const ColorPicker = ({
     returnColor
 }: ColorPickerProps) => {
 
-    const initActive = useCallback(() => {
+    const initActive = useMemo(() => {
         return isLight ? 'black' : 'white'
     }, [isLight]);
 
-    const colorBlocks = useCallback(
+    const colorBlocks = useMemo(
         () => {
             return [
                 {
@@ -49,18 +49,21 @@ const ColorPicker = ({
         }, [isLight]
     );
 
-    const initColorValue = useCallback(() => {
-        return colorBlocks().find(block => block.color === initColor || block.key === initColor)?.key ?? initActive();
+    const initColorValue = useMemo(() => {
+        return colorBlocks.find(block => block.color === initColor || block.key === initColor)?.key ?? initActive;
     }, [colorBlocks, initActive, initColor]);
 
-    const [activeKey, setActiveKey] = useState<string>(initColorValue());
+    const [activeKey, setActiveKey] = useState<string>(initColorValue);
 
-    // TO Check
     useEffect(() => {
-        // console.log(initColorValue());
-        setActiveKey(initColorValue());
-        returnColor?.(initColorValue());
-    }, [initColorValue, returnColor])
+        if (isLight && activeKey === 'white') {
+            returnColor?.('black');
+            setActiveKey('black')
+        } else if (!isLight && activeKey === 'black') {
+            returnColor?.('white');
+            setActiveKey('white')
+        }
+    }, [activeKey, isLight, returnColor])
 
     const diffClassName = useCallback(
         (_block: { key: string, color: string }) => {
@@ -92,7 +95,7 @@ const ColorPicker = ({
 
     const renderColorBlocks = useCallback(
         () => {
-            return colorBlocks().map(block => (
+            return colorBlocks.map(block => (
                 <div
                     key={block.key}
                     title={block.key}
@@ -109,20 +112,47 @@ const ColorPicker = ({
 
     const ColorSettingPanelRef = useRef<SettingPanelRef | null>(null);
 
+    const [chromeColor, setChromeColor] = useState<string>(initColor);
+
     const colorSettingPanelList = useCallback(() => {
         return [
             {
                 key: 'color-picker',
                 title: '色值选择器',
-                value: <ChromePicker />
+                value: (
+                    <ChromePicker
+                        disableAlpha
+                        color={chromeColor}
+                        onChange={(color) => {
+                            setChromeColor(color.hex);
+                            returnColor?.(color.hex);
+                        }}
+                        styles={{
+                            default: {
+                                saturation: {
+                                    cursor: 'crosshair'
+                                }
+                            }
+                        }}
+                    />
+                )
             }
         ];
-    }, []);
+    }, [chromeColor, returnColor]);
 
     const renderColorSettingPanel = useCallback(() => {
         return colorSettingPanelList().map(setting => (
-            <div>
-                <div>{setting.title}</div>
+            <div
+                key={setting.key}
+            >
+                <div
+                    style={{
+                        fontSize: '0.75rem',
+                        marginBottom: '0.5rem'
+                    }}
+                >
+                    {setting.title}
+                </div>
                 <div>
                     {setting.value}
                 </div>
@@ -137,12 +167,11 @@ const ColorPicker = ({
                     className="color-blocks"
                     onClick={(e) => {
                         const key = (e.target as HTMLDivElement).dataset['key'];
-                        console.log(key);
-                        console.log(activeKey);
-
                         if (key && activeKey !== key) {
                             setActiveKey(key);
-                            returnColor?.(colorBlocks().find(block => block.key === key)?.color ?? '');
+                            const color = colorBlocks.find(block => block.key === key)?.color ?? initColor;
+                            returnColor?.(color);
+                            setChromeColor(color);
                         }
                     }}
                 >
@@ -157,16 +186,35 @@ const ColorPicker = ({
                     >
                     </div>
                     <div className="color-setting-block"
+                        title={`色值选择器: ${chromeColor}`}
                         style={commonStyle({
-                            backgroundColor: colorBlocks().find(block => block.key === activeKey)?.color ?? ''
+                            backgroundColor: chromeColor
                         })}
-                        onClick={() => {
-                            ColorSettingPanelRef.current?.clickEvt();
+                        onClick={(e) => {
+                            // console.log(e.target);
+                            const paramsPanel = document.querySelector<HTMLDivElement>('.params-panel-wrapper');
+                            const targetPos = (e.target as HTMLDivElement).getBoundingClientRect();
+                            const paramsPanelPos = paramsPanel?.getBoundingClientRect() ?? { top: 0, left: 0 };
+
+                            const pos = {
+                                top: targetPos.top - paramsPanelPos.top - targetPos.height / 2,
+                                left: targetPos.left - paramsPanelPos.left + 50
+                            }
+
+                            ColorSettingPanelRef.current?.clickEvt({
+                                top: pos.top,
+                                left: pos.left
+                            });
                         }}
                     ></div>
                 </div>
             </div>
-            <SettingPanel ref={ColorSettingPanelRef} >
+            <SettingPanel
+                ref={ColorSettingPanelRef}
+                backgroundColor={isLight ? '#fff' : '#232329'}
+                // widthAdaptive
+                heightAdaptive
+            >
                 {renderColorSettingPanel()}
             </SettingPanel>
         </>
