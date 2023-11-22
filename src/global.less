@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -18,4 +19,36 @@ html.dark {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.chrome-picker {
+    width: 100% !important;
+
+    input {
+        color: inherit !important;
+    }
+
+    .saturation-black {
+        &~div {
+            &>div {
+                cursor: move;
+            }
+        }
+    }
+}
+
+[class='dark'] .chrome-picker {
+    &>div:last-child {
+        background-color: #3B3B3B;
+    }
+
+    svg {
+        border: 1px solid #969696 !important;
+        fill: #969696 !important;
+
+        &:hover {
+            background-color: #969696 !important;
+            fill: #fff !important;
+        }
+    }
 }
