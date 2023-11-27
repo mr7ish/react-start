@@ -118,7 +118,7 @@ const ToolBar = ({
             <div
                 className="toolbar"
                 onClick={(e) => {
-                    const key = ((e.target as HTMLElement).dataset['key'] ?? 'draw') as DrawingMode;
+                    const key = ((e.target as HTMLElement).dataset['key']) as DrawingMode;
                     if (key && activeKey !== key) {
                         console.log(key);
                         setActiveKey(key);
