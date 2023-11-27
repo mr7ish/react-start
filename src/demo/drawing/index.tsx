@@ -4,12 +4,12 @@ import './index.less';
 import type { Drauu } from "@drauu/core";
 import ToolBar, { Mode } from "./tools/toolbar";
 import { callFnSecurely } from "@/utils";
-import ParamsPanel from "./tools/params-panel";
+import ParamsPanel, { DisplayingFieldSets } from "./tools/params-panel";
 import Toggle from "../toggle";
 
-// TODO color
 // TODO size ✔
-// TODO fill
+// TODO color ✔
+// TODO fill ✔
 // TODO dasharray
 // TODO cornerRadius
 // TODO stylusOptions
@@ -25,9 +25,13 @@ const Drawing = () => {
     const [mode, setMode] = useState<Mode>('stylus');
     const initBrushSize = useMemo(() => 5, []);
     const initColor = useMemo(() => '#87CEEB', []);
+    const initShapeFilled = useMemo(() => false, []);
     const [brushSize, setBrushSize] = useState<number>(initBrushSize);
     const [brushColor, setBrushColor] = useState<string>(initColor);
-
+    const [isShapeFilled, setIsShapeFilled] = useState<boolean>(initShapeFilled);
+    const [shapeFilledColor, setShapeFilledColor] = useState<string>(initColor);
+    const commonFieldSets = useMemo<DisplayingFieldSets[]>(() => ['brushSize', 'brushColorPicker'], []);
+    const [displayingFieldSets, setDisplayingFieldSets] = useState<DisplayingFieldSets[]>(commonFieldSets);
 
     useEffect(() => {
         // init drauu when component mount 
@@ -78,6 +82,28 @@ const Drawing = () => {
         }, [brushColor]
     );
 
+    const setShapeFilled = useCallback(
+        () => {
+            drauu.current!.brush.fill = !isShapeFilled ? 'transparent' : shapeFilledColor
+        }, [isShapeFilled, shapeFilledColor]
+    );
+
+    useEffect(() => {
+        if (['rectangle', 'ellipse'].includes(mode)) {
+            const handle: DisplayingFieldSets[] = isShapeFilled ? ['filledPicker', 'shapeFilledPicker'] : ['filledPicker'];
+            setDisplayingFieldSets([
+                ...commonFieldSets,
+                ...handle
+            ]);
+        } else {
+            setDisplayingFieldSets([
+                ...commonFieldSets,
+            ]);
+            setIsShapeFilled(initShapeFilled);
+            setShapeFilledColor(initColor);
+        }
+    }, [commonFieldSets, initColor, initShapeFilled, isShapeFilled, mode]);
+
     useEffect(() => {
         callFnSecurely(!!drauu.current, setBrushMode);
     }, [setBrushMode]);
@@ -89,6 +115,10 @@ const Drawing = () => {
     useEffect(() => {
         callFnSecurely(!!drauu.current, setBrushColorTheme);
     }, [setBrushColorTheme]);
+
+    useEffect(() => {
+        callFnSecurely(!!drauu.current, setShapeFilled);
+    }, [setShapeFilled]);
 
     return (
         <div className="drawing-wrapper">
@@ -113,12 +143,29 @@ const Drawing = () => {
                 brushColorColorPicker={{
                     initColor,
                     returnColor(color) {
-                        console.log('color =>', color);
-
                         setBrushColor(color);
                     }
                 }}
+                shapeFilledPicker={{
+                    initColor,
+                    initShapeFilled,
+                    returnColor(color) {
+                        setShapeFilledColor(color);
+                    },
+                    returnIsFilled(filled) {
+                        setIsShapeFilled(filled);
+                        if (filled) {
+                            setDisplayingFieldSets([
+                                ...displayingFieldSets,
+                                'shapeFilledPicker'
+                            ]);
+                        } else {
+                            setDisplayingFieldSets(displayingFieldSets.filter(field => field !== 'shapeFilledPicker'));
+                        }
+                    }
+                }}
                 isLight={isLight}
+                displayingFieldSets={displayingFieldSets}
             />
 
             <svg id="drawing-area"></svg>

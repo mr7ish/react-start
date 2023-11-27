@@ -1,54 +1,80 @@
 import { Shrink } from "@/demo/svg";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import RangeSlider from "./range-slider";
 import ColorPicker from "./color-picker";
+import FilledPicker from "./filled-picker";
+
+export type DisplayingFieldSets = 'brushSize' | 'brushColorPicker' | 'filledPicker' | 'shapeFilledPicker'
 
 type ParamsPanelProps = {
     isLight?: boolean
     initStatus?: boolean
     brushSizeRangeSlider: {
-        initValue: number
-        returnRangeValue: (rangeValue: number) => void
+        initValue?: number
+        returnRangeValue?: (rangeValue: number) => void
     }
     brushColorColorPicker: {
-        initColor: string
-        returnColor: (color: string) => void
+        initColor?: string
+        returnColor?: (color: string) => void
     }
+    shapeFilledPicker: {
+        initColor?: string
+        initShapeFilled?: boolean
+        returnColor?: (color: string) => void
+        returnIsFilled?: (filled: boolean) => void
+    },
+    displayingFieldSets: DisplayingFieldSets[]
 }
 
 const ParamsPanel = ({
     initStatus = true,
     brushSizeRangeSlider,
     brushColorColorPicker,
+    shapeFilledPicker,
+    displayingFieldSets,
     isLight = true
 }: ParamsPanelProps) => {
 
+
     const [open, setOpen] = useState<boolean>(initStatus);
 
-    const fieldsetList = [
-        {
-            key: 'brushSize',
-            label: '笔刷粗细',
-            el: () => <RangeSlider label='' min={1} max={50} step={1} width={'100%'} initValue={brushSizeRangeSlider.initValue} returnRangeValue={brushSizeRangeSlider.returnRangeValue} />
-        },
-        {
-            key: 'colorPicker',
-            label: '颜色选择',
-            el: () => <ColorPicker isLight={isLight} initColor={brushColorColorPicker.initColor} returnColor={brushColorColorPicker.returnColor} />
-        }
-    ];
+    const fieldsetList = useMemo(() => {
+        return [
+            {
+                key: 'brushSize',
+                label: '笔刷粗细',
+                el: () => <RangeSlider label='' min={1} max={50} step={1} width={'100%'} initValue={brushSizeRangeSlider.initValue} returnRangeValue={brushSizeRangeSlider.returnRangeValue} />
+            },
+            {
+                key: 'brushColorPicker',
+                label: '笔刷颜色',
+                el: () => <ColorPicker isLight={isLight} initColor={brushColorColorPicker.initColor} returnColor={brushColorColorPicker.returnColor} />
+            },
+            {
+                key: 'filledPicker',
+                label: '填充',
+                el: () => <FilledPicker initFilled={shapeFilledPicker.initShapeFilled} returnIsFilled={shapeFilledPicker.returnIsFilled} />
+            },
+            {
+                key: 'shapeFilledPicker',
+                label: '填充颜色',
+                el: () => <ColorPicker isLight={isLight} initColor={shapeFilledPicker.initColor} returnColor={shapeFilledPicker.returnColor} />
+            },
+        ]
+    }, [brushColorColorPicker, brushSizeRangeSlider, shapeFilledPicker, isLight])
 
-    const renderFieldsets = () => {
-        return fieldsetList.map(fieldset => (
-            <div
-                key={fieldset.key}
-                className="params-panel-fieldset"
-            >
-                <div className="fieldset-label">{fieldset.label}</div>
-                <div className="fieldset-wrapper">{fieldset.el()}</div>
-            </div>
-        ))
-    }
+    const renderFieldsets = useCallback(() => {
+        return fieldsetList.filter(fieldset => displayingFieldSets.includes(fieldset.key as DisplayingFieldSets))
+            .map(fieldset => (
+                <div
+                    key={fieldset.key}
+                    className="params-panel-fieldset"
+                >
+                    <div className="fieldset-label">{fieldset.label}</div>
+                    <div className="fieldset-wrapper">{fieldset.el()}</div>
+                </div>
+            ))
+    }, [displayingFieldSets, fieldsetList]);
 
     return (
         <div
