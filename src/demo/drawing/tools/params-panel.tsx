@@ -3,8 +3,9 @@ import { useCallback, useMemo, useState } from "react";
 import RangeSlider from "./range-slider";
 import ColorPicker from "./color-picker";
 import FilledPicker from "./filled-picker";
+import StrokePicker, { StrokePattern } from "./stroke-picker";
 
-export type DisplayingFieldSets = 'brushSize' | 'brushColorPicker' | 'filledPicker' | 'shapeFilledPicker'
+export type DisplayingFieldSets = 'brushSize' | 'brushColorPicker' | 'filledPicker' | 'shapeFilledPicker' | 'strokePicker'
 
 type ParamsPanelProps = {
     isLight?: boolean
@@ -23,6 +24,10 @@ type ParamsPanelProps = {
         returnColor?: (color: string) => void
         returnIsFilled?: (filled: boolean) => void
     },
+    strokePicker: {
+        initPattern?: StrokePattern
+        returnStrokePattern?: (pattern: StrokePattern) => void
+    }
     displayingFieldSets: DisplayingFieldSets[]
 }
 
@@ -31,6 +36,7 @@ const ParamsPanel = ({
     brushSizeRangeSlider,
     brushColorColorPicker,
     shapeFilledPicker,
+    strokePicker,
     displayingFieldSets,
     isLight = true
 }: ParamsPanelProps) => {
@@ -60,8 +66,13 @@ const ParamsPanel = ({
                 label: '填充颜色',
                 el: () => <ColorPicker isLight={isLight} initColor={shapeFilledPicker.initColor} returnColor={shapeFilledPicker.returnColor} />
             },
+            {
+                key: 'strokePicker',
+                label: '线条样式',
+                el: () => <StrokePicker initPattern={strokePicker.initPattern} returnStrokePattern={strokePicker.returnStrokePattern}></StrokePicker>
+            }
         ]
-    }, [brushColorColorPicker, brushSizeRangeSlider, shapeFilledPicker, isLight])
+    }, [brushColorColorPicker, brushSizeRangeSlider, shapeFilledPicker, strokePicker, isLight])
 
     const renderFieldsets = useCallback(() => {
         return fieldsetList.filter(fieldset => displayingFieldSets.includes(fieldset.key as DisplayingFieldSets))

@@ -6,11 +6,12 @@ import ToolBar, { Mode } from "./tools/toolbar";
 import { callFnSecurely } from "@/utils";
 import ParamsPanel, { DisplayingFieldSets } from "./tools/params-panel";
 import Toggle from "../toggle";
+import { StrokePattern } from "./tools/stroke-picker";
 
 // TODO size ✔
 // TODO color ✔
 // TODO fill ✔
-// TODO dasharray
+// TODO dasharray ✔
 // TODO cornerRadius
 // TODO stylusOptions
 // TODO ctrl z/y
@@ -26,10 +27,12 @@ const Drawing = () => {
     const initBrushSize = useMemo(() => 5, []);
     const initColor = useMemo(() => '#87CEEB', []);
     const initShapeFilled = useMemo(() => false, []);
+    const initPattern = useMemo<StrokePattern>(() => 'solid', []);
     const [brushSize, setBrushSize] = useState<number>(initBrushSize);
     const [brushColor, setBrushColor] = useState<string>(initColor);
     const [isShapeFilled, setIsShapeFilled] = useState<boolean>(initShapeFilled);
     const [shapeFilledColor, setShapeFilledColor] = useState<string>(initColor);
+    const [strokePattern, setStrokePattern] = useState(initPattern);
     const commonFieldSets = useMemo<DisplayingFieldSets[]>(() => ['brushSize', 'brushColorPicker'], []);
     const [displayingFieldSets, setDisplayingFieldSets] = useState<DisplayingFieldSets[]>(commonFieldSets);
 
@@ -42,10 +45,6 @@ const Drawing = () => {
                 size: brushSize,
                 mode: mode as DrawingMode,
                 arrowEnd: false
-                // dash line
-                // dasharray: '10 10',
-                // dash-dotted line
-                // dasharray: '1 10'
             },
         });
         // console.log(drauu);
@@ -88,6 +87,12 @@ const Drawing = () => {
         }, [isShapeFilled, shapeFilledColor]
     );
 
+    const setStrokeDasharray = useCallback(
+        () => {
+            drauu.current!.brush.dasharray = strokePattern === 'dashed' ? '10 10' : strokePattern === 'dotted' ? '1 10' : undefined;
+        }, [strokePattern]
+    )
+
     useEffect(() => {
         if (['rectangle', 'ellipse'].includes(mode)) {
             const handle: DisplayingFieldSets[] = isShapeFilled ? ['filledPicker', 'shapeFilledPicker'] : ['filledPicker'];
@@ -102,7 +107,15 @@ const Drawing = () => {
             setIsShapeFilled(initShapeFilled);
             setShapeFilledColor(initColor);
         }
-    }, [commonFieldSets, initColor, initShapeFilled, isShapeFilled, mode]);
+
+        if (mode !== 'stylus') {
+            setDisplayingFieldSets((newFieldsSets) => [
+                ...newFieldsSets,
+                'strokePicker'
+            ]);
+        }
+
+    }, [commonFieldSets, initColor, initPattern, initShapeFilled, isShapeFilled, mode]);
 
     useEffect(() => {
         callFnSecurely(!!drauu.current, setBrushMode);
@@ -119,6 +132,10 @@ const Drawing = () => {
     useEffect(() => {
         callFnSecurely(!!drauu.current, setShapeFilled);
     }, [setShapeFilled]);
+
+    useEffect(() => {
+        callFnSecurely(!!drauu.current, setStrokeDasharray);
+    }, [setStrokeDasharray]);
 
     return (
         <div className="drawing-wrapper">
@@ -162,6 +179,12 @@ const Drawing = () => {
                         } else {
                             setDisplayingFieldSets(displayingFieldSets.filter(field => field !== 'shapeFilledPicker'));
                         }
+                    }
+                }}
+                strokePicker={{
+                    initPattern,
+                    returnStrokePattern(pattern) {
+                        setStrokePattern(pattern);
                     }
                 }}
                 isLight={isLight}
