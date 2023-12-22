@@ -273,3 +273,57 @@ export const Solid = ({
         </svg>
     );
 }
+
+export const DashLine = ({
+    filledColor = '#000',
+    originalStyle = {}
+}) => {
+    return (
+        <svg
+            style={originalStyle}
+            className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4066" width="200" height="200">
+            <path
+                style={{
+                    fill: filledColor
+                }}
+                d="M112 476h160v72H112zM432 476h160v72H432zM752 476h160v72H752z" p-id="4067">
+            </path>
+        </svg>
+    );
+}
+
+export const SolidLine = ({
+    filledColor = '#000',
+    originalStyle = {}
+}) => {
+    return (
+        <svg
+            style={originalStyle}
+            className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5033" width="200" height="200">
+            <path
+                style={{
+                    fill: filledColor
+                }}
+                d="M48.837 452.53h926.326v78.768H48.837z" p-id="5034">
+            </path>
+        </svg>
+    );
+}
+
+export const DottedLine = ({
+    filledColor = '#000',
+    originalStyle = {}
+}) => {
+    return (
+        <svg
+            style={originalStyle}
+            className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11265" width="200" height="200">
+            <path
+                style={{
+                    fill: filledColor
+                }}
+                d="M84.8 468.8H43.2C17.6 468.8 0 486.4 0 512s17.6 43.2 43.2 43.2h43.2C110.4 555.2 128 537.6 128 512s-17.6-43.2-43.2-43.2zM384 468.8h-43.2c-25.6 0-43.2 17.6-43.2 43.2s17.6 43.2 43.2 43.2H384c25.6 0 43.2-17.6 43.2-43.2s-17.6-43.2-43.2-43.2zM683.2 468.8H640c-25.6 0-43.2 17.6-43.2 43.2s17.6 43.2 43.2 43.2h43.2c25.6 0 43.2-17.6 43.2-43.2-1.6-25.6-17.6-43.2-43.2-43.2zM980.8 468.8h-43.2c-25.6 0-43.2 17.6-43.2 43.2s17.6 43.2 43.2 43.2h43.2c25.6 0 43.2-17.6 43.2-43.2s-17.6-43.2-43.2-43.2z" p-id="11266">
+            </path>
+        </svg>
+    );
+}
